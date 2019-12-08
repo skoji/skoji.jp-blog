@@ -4,9 +4,17 @@
           {{ post.title }}
         </h2>
         <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
-	{% if post.image and post.image != "/blog/assets/logo.png" %}
-	<img class="excerpt-img" src="{{ post.image }}" alt=" " />
-	{% endif %}
+	    {% if post.image and post.image != "/blog/assets/logo.png" %}
+        {% capture image_start %}{{ post.image | slice: 0, 5 }}{% endcapture %}
+        {% if image_start == "/blog" %}
+            {% capture image_path %}
+            {{ post.image | image_path_filter }}
+            {% endcapture %}
+            {% thumbnail image_path 200x200< %}
+          {% else %}
+          <img class="excerpt-img" src="{{ post.image }}" alt=" " />                                         
+          {% endif %}
+          {% endif %}
         <p>{{ post.excerpt | strip_html | truncate: 70, "..." }}</p>
       </li>
       </a>
